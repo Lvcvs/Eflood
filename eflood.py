@@ -15,7 +15,7 @@ version = "v1.0.0"
 try:
     gmail = s.SMTP("smtp.gmail.com:587")
 except socket.gaierror:
-    print("[%s-%s] Nessuna connessione"%(red,end))
+    print("\n[%s-%s] Nessuna connessione\n"%(red,end))
     sys.exit()
 
 def main():
@@ -30,7 +30,7 @@ def main():
     try:
         gmail.starttls()
     except s.SMTPException:
-        print("[%s-%s] Connessione sicura non riuscita"%(red,end))
+        print("\n[%s-%s] Connessione sicura non riuscita\n"%(red,end))
         sys.exit("")
 
     try:
@@ -38,10 +38,10 @@ def main():
         print("\n[%s+%s] Login eseguito\n"%(bright_green,end))
         flooder(username)
     except s.SMTPAuthenticationError:
-        print("[%s-%s] Credenziali non valide"%(red,end))
-        return main()
+        print("\n[%s-%s] Credenziali non valide\n"%(red,end))
+        sys.exit()
 
-    print("[%s-%s] Qualcosa è andato storto..."%(red,end))
+    print("\n[%s-%s] Qualcosa è andato storto...\n"%(red,end))
     sys.exit()
 
 def flooder(username):
@@ -55,24 +55,24 @@ def flooder(username):
     try:
         gmail.sendmail(username, email, message)
     except s.SMTPRecipientsRefused:
-        print("[%s-%s] Indirizzo email rifiutato"%(red,end))
+        print("\n[%s-%s] Indirizzo email rifiutato\n"%(red,end))
         return flooder(username)
     except s.SMTPDataError as e:
         if e.smtp_code == 550:
             print("\n[%s-%s] Quota giornaliera raggiunta per l'email:"%(red,end))
-            print("### %s"%(username))
+            print("### %s\n"%(username))
             return main()
         else:
-            print("[%s-%s] Email o Messaggio rifiutati"%(red,end))
-        sys.exit("")
+            print("\n[%s-%s] Email o Messaggio rifiutati\n"%(red,end))
+        sys.exit()
     except s.SMTPConnectError:
-        print("[%s-%s] Errore di connessione col server"%(red,end))
+        print("\n[%s-%s] Errore di connessione col server\n"%(red,end))
         sys.exit()
     except s.SMTPSenderRefused:
-        print("[%s-%s] Indirizzo email rifiutato"%(red,end))
+        print("\n[%s-%s] Indirizzo email rifiutato\n"%(red,end))
         return flooder(username)
 
-    print("\n[%s*%s] Ctrl + C per fermare"%(bright_yellow,end))
+    print("\n[%s*%s] Ctrl + C per fermare\n"%(bright_yellow,end))
     connection_error = 0
     spediti = 1
     while True:
@@ -93,8 +93,8 @@ def flooder(username):
                 sys.exit("\n[%s-%s] Impossibile ristabilire la connessione\n"%(red,end))
             continue
         except s.SMTPResponseException as e:
-            print("SMTP error code: trying again . . .")
-            continue
+            print("\n[%s-%s] Errore col servizio SMTP\n"%(red,end))
+            sys.exit()
 
 if __name__ == "__main__":
     print("""
