@@ -3,7 +3,6 @@
 # Autore: Skull00
 import smtplib as s
 import getpass,sys,readline,socket
-
 global end,red,blue,bright_green,bright_yellow,version,gmail
 end = '\033[0m'
 red = '\033[1;31m'
@@ -26,13 +25,11 @@ def main():
     except (KeyboardInterrupt,EOFError):
         print("\n[%s-%s] Interrotto\n"%(red,end))
         sys.exit()
-
     try:
         gmail.starttls()
     except s.SMTPException:
         print("\n[%s-%s] Connessione sicura non riuscita\n"%(red,end))
         sys.exit("")
-
     try:
         gmail.login(username, password)
         print("\n[%s+%s] Login eseguito\n"%(bright_green,end))
@@ -40,7 +37,6 @@ def main():
     except s.SMTPAuthenticationError:
         print("\n[%s-%s] Credenziali non valide\n"%(red,end))
         sys.exit()
-
     print("\n[%s-%s] Qualcosa è andato storto...\n"%(red,end))
     sys.exit()
 
@@ -51,7 +47,6 @@ def flooder(username):
     except (KeyboardInterrupt,EOFError):
         print("\n[%s-%s] Interrotto\n"%(red,end))
         return main()
-
     try:
         gmail.sendmail(username, email, message)
     except s.SMTPRecipientsRefused:
@@ -71,7 +66,6 @@ def flooder(username):
     except s.SMTPSenderRefused:
         print("\n[%s-%s] Indirizzo email rifiutato\n"%(red,end))
         return flooder(username)
-
     print("\n[%s*%s] Ctrl + C per fermare\n"%(bright_yellow,end))
     connection_error = 0
     spediti = 1
