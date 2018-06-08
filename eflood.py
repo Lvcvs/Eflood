@@ -9,7 +9,7 @@ red = '\033[1;31m'
 blue = '\033[1;34m'
 bright_green = '\033[1;32m'
 bright_yellow = '\033[1;33m'
-version = "v1.0.0"
+version = "v1.0.1"
 
 try:
     gmail = s.SMTP("smtp.gmail.com:587")
@@ -46,17 +46,17 @@ def flooder(username):
         message = raw_input("(Messaggio) > ")
     except (KeyboardInterrupt,EOFError):
         print("\n[%s-%s] Interrotto\n"%(red,end))
-        return main()
+        sys.exit()
     try:
         gmail.sendmail(username, email, message)
     except s.SMTPRecipientsRefused:
         print("\n[%s-%s] Indirizzo email rifiutato\n"%(red,end))
-        return flooder(username)
+        sys.exit()
     except s.SMTPDataError as e:
         if e.smtp_code == 550:
             print("\n[%s-%s] Quota giornaliera raggiunta per l'email:"%(red,end))
             print("### %s\n"%(username))
-            return main()
+            sys.exit()
         else:
             print("\n[%s-%s] Email o Messaggio rifiutati\n"%(red,end))
         sys.exit()
@@ -65,7 +65,7 @@ def flooder(username):
         sys.exit()
     except s.SMTPSenderRefused:
         print("\n[%s-%s] Indirizzo email rifiutato\n"%(red,end))
-        return flooder(username)
+        sys.exit()
     print("\n[%s*%s] Ctrl + C per fermare\n"%(bright_yellow,end))
     connection_error = 0
     spediti = 1
@@ -78,7 +78,7 @@ def flooder(username):
         except (KeyboardInterrupt,EOFError):
             sys.stdout.flush()
             print("\n\n[%s-%s] Interrotto\n"%(red,end))
-            return flooder(username)
+            sys.exit()
         except s.SMTPServerDisconnected:
             print("[%s-%s] Connessione al server persa, riprovo..."%(red,end))
             time.sleep(1.5)
